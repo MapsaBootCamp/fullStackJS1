@@ -31,6 +31,9 @@ const user = {
   },
 };
 
+const newObj = new Object();
+newObj["name"] = "A";
+
 // console.log(user);
 // user.active = true;
 user["active"] = true;
@@ -62,27 +65,62 @@ class CreateUser {
   }
 }
 
+// for (let [key, val] of Object.entries(user)) {
+//   console.log("key: ", key);
+//   console.log("val: ", val);
+// }
+
 const newUser = new CreateUser("Ashkan", "1234", "Ashkan", "Divband", 25);
 
 // console.log(newUser.getFullName());
 
+/////////////////////// Class in javascript
 class Graph {
   constructor(directed = false) {
     this.adjMatrix = {};
+    this.directed = directed;
   }
 
-  _addNode(nodeName) {
+  #addNode(nodeName) {
     if (!this.adjMatrix.hasOwnProperty(nodeName)) {
       this.adjMatrix[nodeName] = [];
     }
   }
   addNode(nodeNames) {
     if (Array.isArray(nodeNames)) {
-      nodeNames.forEach((nodeName) => this._addNode(nodeName));
+      nodeNames.forEach((nodeName) => this.#addNode(nodeName));
     } else {
-      this._addNode(nodeNames);
+      this.#addNode(nodeNames);
     }
   }
+  addEdge(node1, node2) {
+    if (!(node1 in this.adjMatrix && node2 in this.adjMatrix)) {
+      throw new Error(`${node1} or ${node2} is not in Graph`);
+    } else {
+      this.adjMatrix[node1].push(node2);
+      if (!this.directed) {
+        this.adjMatrix[node2].push(node1);
+      }
+    }
+  }
+  // TODO
+  isConnected() {}
+
+  // TODO
+  findPath(node1, node2) {}
+
+  // TODO
+  findShortestPath(node1, node2) {}
+
+  // TODO
+  getNodeDegree(node) {}
+
+  // TODO
+  haveCycle() {}
+
+  // TODO
+  isTree() {}
+
   draw() {
     console.log(this.adjMatrix);
   }
@@ -91,4 +129,7 @@ class Graph {
 const g1 = new Graph();
 g1.addNode("a");
 g1.addNode(["a", "b", 23]);
-g1.draw();
+g1.addEdge("b", "a");
+g1.addEdge("b", 23);
+// g1.draw();
+// const g2 = new Graph((directed = true));
