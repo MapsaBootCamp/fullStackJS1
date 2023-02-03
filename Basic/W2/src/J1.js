@@ -133,3 +133,5 @@ g1.addEdge("b", "a");
 g1.addEdge("b", 23);
 // g1.draw();
 // const g2 = new Graph((directed = true));
+
+var j1Name = "SSSS";
