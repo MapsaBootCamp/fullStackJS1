@@ -1,0 +1,119 @@
+[
+    {
+      "id": 1,
+      "name": "John",
+      "surName": "Minister",
+      "gender": "male",
+      "age": 43,
+      "marriedTo": [4],
+      "children": [2, 3]
+    },
+    {
+      "id": 2,
+      "name": "David",
+      "surName": "Minister",
+      "gender": "male",
+      "age": 18,
+      "marriedTo": [],
+      "children": []
+    },
+    {
+      "id": 3,
+      "name": "Sarah",
+      "surName": "Minister",
+      "gender": "female",
+      "age": 10,
+      "marriedTo": [],
+      "children": []
+    },
+    {
+      "id": 4,
+      "name": "Maria",
+      "surName": "Johnson",
+      "gender": "female",
+      "age": 39,
+      "marriedTo": [5, 1],
+      "children": [2, 3, 6]
+    },
+    {
+      "id": 5,
+      "name": "Edward",
+      "surName": "Mankins",
+      "gender": "male",
+      "age": 40,
+      "marriedTo": [4],
+      "children": [6]
+    },
+    {
+      "id": 6,
+      "name": "Jane",
+      "surName": "Mankins",
+      "gender": "female",
+      "age": 22,
+      "marriedTo": [7],
+      "children": []
+    },
+    {
+      "id": 7,
+      "name": "Kent",
+      "surName": "Abram",
+      "gender": "male",
+      "age": 24,
+      "marriedTo": [6],
+      "children": []
+    },
+    {
+      "id": 8,
+      "name": "Mike",
+      "surName": "Minister",
+      "gender": "male",
+      "age": 72,
+      "marriedTo": [9],
+      "children": [1, 10, 11]
+    },
+    {
+      "id": 9,
+      "name": "Jenifer",
+      "surName": "Kave",
+      "gender": "female",
+      "age": 68,
+      "marriedTo": [8],
+      "children": [1, 10, 11]
+    },
+    {
+      "id": 10,
+      "name": "James",
+      "surName": "Minister",
+      "gender": "male",
+      "age": 33,
+      "marriedTo": [],
+      "children": []
+    },
+    {
+      "id": 11,
+      "name": "Ana",
+      "surName": "Minister",
+      "gender": "female",
+      "age": 36,
+      "marriedTo": [],
+      "children": []
+    },
+    {
+      "id": 12,
+      "name": "Mohammad",
+      "surName": "Abram",
+      "gender": "male",
+      "age": 52,
+      "marriedTo": [13],
+      "children": [7]
+    },
+    {
+      "id": 13,
+      "name": "Maryam",
+      "surName": "Fatahi",
+      "gender": "female",
+      "age": 44,
+      "marriedTo": [12],
+      "children": [7]
+    }
+  ]
