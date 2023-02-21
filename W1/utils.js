@@ -1,5 +1,6 @@
 const fs = require("fs"),
   { StatusCodes } = require("http-status-codes");
+const { resolve } = require("path");
 
 exports.getFile = (path, res) => {
   fs.readFile(path, (err, data) => {
@@ -12,7 +13,20 @@ exports.getFile = (path, res) => {
   });
 };
 
+exports.parseJsonBody = (req) => {
+  return new Promise((resolve) => {
+    let body = [];
+    req
+      .on("data", (chunk) => {
+        body.push(chunk);
+      })
+      .on("end", () => {
+        body = Buffer.concat(body).toString();
+        resolve(JSON.parse(body));
+      });
+  });
+};
+
 exports.jsonSerialize = (data, res) => {
   res.end(JSON.stringify(data));
 };
-
