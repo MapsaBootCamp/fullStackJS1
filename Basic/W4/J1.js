@@ -38,9 +38,33 @@ const writeData = "Hey";
 //   .then(() => fs.promises.writeFile(pathFile, writeData, { flag: "a" }))
 //   .catch((err) => console.log(err));
 
-// fs.open(pathFile, "a+", (err, fd) => {
-//   console.log(fd);
-// });
+const buffer_ = Buffer.alloc(30);
+const offset = 3;
+const position = 2;
+const length = 26;
+
+// const
+fs.open(pathFile, "a+", (err, fd) => {
+  if (err) {
+    throw new Error(err);
+  }
+
+  fs.read(fd, buffer_, offset, length, position, (err, byte, buffer) => {
+    if (err) {
+      throw new Error(err);
+    }
+    const write_buff = Buffer.from("\nSalam");
+    fs.write(fd, write_buff, (err, written, buffer) => {
+      if (err) {
+        throw new Error(err);
+      }
+      console.log("written: ", written);
+      console.log("buffer write: ", buffer.toString());
+    });
+    console.log("byte: ", byte);
+    console.log("buffer: ", buffer.toString());
+  });
+});
 
 async function getData() {
   try {
@@ -69,4 +93,3 @@ async function getData() {
 //   .get("https://jsonplaceholder.typicode.com/todos/1")
 //   .then((res) => console.log(res.data))
 //   .catch((err) => console.log(err));
-
