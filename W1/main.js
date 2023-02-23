@@ -1,3 +1,4 @@
+const { appendFile } = require("fs");
 const http = require("http"),
   { contentTypes } = require("./content-types"),
   route = require("./routes"),
@@ -59,9 +60,39 @@ route.post("/todos", (req, res) => {
   }
 });
 
+function findTodoObj(req, res) {
+  if (!Object.getOwnPropertyNames(req.query).length) {
+    res.writeHead(StatusCodes.BAD_REQUEST);
+    return res.end("id user bayad bedi!");
+  }
+  const { id } = req.query;
+  const todo = db.Tasks.find((todo) => todo.id === parseInt(id));
+  return todo;
+}
+
 route.get("/todo-detail", (req, res) => {
-  console.log(req.query);
-  res.end("OK");
+  const todo = findTodoObj(req, res);
+  res.json(todo);
+});
+
+route.put("/todo-update", (req, res) => {
+  const body = req.body;
+  const { id } = req.query;
+  const result = {};
+  const todo = findTodoObj(req, res);
+
+  if (!todo) {
+    res.writeHead(StatusCodes.NOT_FOUND);
+    return res.end(`task ba id ${req.query.id} vojud nadarad`);
+  } else {
+    todo["title"] = body["title"];
+  }
+  res.json(todo);
+});
+
+route.delete("/todo-delete", (req, res) => {
+  const todo = findTodoObj(req, res);
+  res.json(todo);
 });
 
 route.get("/about", (req, res) => {

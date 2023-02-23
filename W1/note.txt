@@ -1,0 +1,4 @@
+Network  ===> tcp/ip  ===> 5 layers ===> physical + datalink + network + transport + application
+
+http ==> request ===> methods: GET, POST, PUT, PATCH, DELETE, ...
+         response ===> status-code: 1xx, 2xx, 3xx, 4xx, 5xx
