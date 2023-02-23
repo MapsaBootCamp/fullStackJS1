@@ -15,6 +15,29 @@ route.get("/", (req, res) => {
   return utils.getFile(path, res);
 });
 
+route.post("/register", (req, res) => {
+  const { username } = req.body;
+  if (!username) {
+    res.writeHead(StatusCodes.BAD_REQUEST);
+    return res.json({
+      error: true,
+      message: "username ejbari ast!",
+    });
+  } else {
+    db.run(`INSERT INTO User(username) VALUES(?)`, [username], (err) => {
+      if (err) {
+        return res.json({
+          error: true,
+          message: err.message,
+        });
+      } else {
+        res.writeHead(StatusCodes.CREATED);
+        return res.end("user sakhte shod");
+      }
+    });
+  }
+});
+
 route.get("/todos", (req, res) => {
   res.writeHead(StatusCodes.OK, contentTypes.json);
   return res.json(
@@ -92,7 +115,10 @@ route.put("/todo-update", (req, res) => {
 
 route.delete("/todo-delete", (req, res) => {
   const todo = findTodoObj(req, res);
-  res.json(todo);
+  console.log(db.Tasks.indexOf(todo));
+  db.Tasks.splice(db.Tasks.indexOf(todo), 1);
+  res.writeHead(StatusCodes.NO_CONTENT);
+  res.json({ message: "ba khubi khoshi hazf shod!" });
 });
 
 route.get("/about", (req, res) => {
