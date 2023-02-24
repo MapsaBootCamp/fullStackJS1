@@ -3,6 +3,8 @@ const { contentTypes } = require("../content-types"),
   utils = require("../utils"),
   { StatusCodes } = require("http-status-codes");
 
+
+
 exports.register = (req, res) => {
   const { username } = req.body;
   if (!username) {
@@ -25,6 +27,19 @@ exports.register = (req, res) => {
     });
   }
 };
+
+// exports.getUser = async (req, res) => {
+//   db.get("SELECT * FROM User WHERE userID=?", req.query.id, (err, user) => {
+//     if (err) {
+//       return res.json({
+//         error: true,
+//         message: err.message,
+//       });
+//     } else {
+//       res.json(user);
+//     }
+//   });
+// };
 
 exports.usersList = async (req, res) => {
   db.all("SELECT userID, username FROM User", (err, users) => {

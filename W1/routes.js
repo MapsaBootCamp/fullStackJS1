@@ -22,7 +22,7 @@ exports.handler = async (req, res) => {
     routing[req.method][req.path](req, res);
   } catch (error) {
     res.writeHead(StatusCodes.NOT_FOUND);
-    res.end("not found");
+    return utils.errResponse(res, error.message);
   }
 };
 

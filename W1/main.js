@@ -18,6 +18,7 @@ route.get("/", (req, res) => {
 //// user routes
 route.post("/register", userController.register);
 route.get("/user-list", userController.usersList);
+// route.get("/user-detail", userController.getUser);
 
 //// todos routes
 route.get("/todos", taskController.todoList);

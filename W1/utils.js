@@ -13,6 +13,14 @@ exports.getFile = (path, res) => {
   });
 };
 
+exports.errResponse = (res, errorMessage) => {
+  const result = {
+    error: true,
+    message: errorMessage,
+  };
+  return res.json(result);
+};
+
 exports.parseJsonBody = (req) => {
   return new Promise((resolve) => {
     let body = [];

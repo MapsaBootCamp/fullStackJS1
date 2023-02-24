@@ -1,6 +1,8 @@
 const { contentTypes } = require("../content-types"),
   db = require("../db"),
   utils = require("../utils"),
+  userService = require("./user.service"),
+  taskService = require("./task.service"),
   { StatusCodes } = require("http-status-codes");
 
 function findTodoObj(req, res) {
@@ -13,49 +15,53 @@ function findTodoObj(req, res) {
   return todo;
 }
 
-exports.createTodo = (req, res) => {
+exports.createTodo = async (req, res) => {
   const body = req.body;
   const result = {};
   if (!body) {
     res.writeHead(StatusCodes.OK, contentTypes.json);
-    result.error = true;
-    result.message = "for create task send data!";
-    return res.end(JSON.stringify(result));
+    return utils.errResponse(res, "for create task send data!");
   } else {
-    const { title, user, dueDate } = body;
-    const userObj = db.Users.find((val) => {
-      return val.username === user;
-    });
-    if (!userObj) {
-      res.writeHead(StatusCodes.OK, contentTypes.json);
-      result.error = true;
-      result.message = `user ba name ${user} nadarim!`;
-      return res.json(result);
+    try {
+      const { title, username, dueDate } = body;
+      const userObj = await userService.getUserByUsername(username);
+      if (!userObj) {
+        res.writeHead(StatusCodes.NOT_FOUND, contentTypes.json);
+        return utils.errResponse(res, "chenin useri nadarim");
+      }
+      const tempDate = new Date();
+      tempDate.setDate(tempDate.getDate() + parseInt(dueDate));
+      const taskObj = {
+        title,
+        userID: userObj.userID,
+        dueDate: tempDate,
+      };
+      await taskService.createTask(taskObj);
+      res.writeHead(StatusCodes.CREATED, contentTypes.json);
+      return res.json({
+        error: false,
+        message: `task ${title} sakhte shod`,
+      });
+    } catch (error) {
+      return utils.errResponse(res, error.message);
     }
-    const tempDate = new Date();
-    tempDate.setDate(tempDate.getDate() + parseInt(dueDate));
-    const todo = {
-      id: db.Tasks.length,
-      title,
-      user: userObj.id,
-      done: false,
-      dueDate: tempDate,
-    };
-    db.Tasks.push(todo);
-    res.json(todo);
   }
 };
 
 exports.todoList = (req, res) => {
+  const { username } = req.query;
+  const dbQuery = username
+    ? "SELECT taskID, username, title as taskTitle, done, dueDate FROM Task INNER JOIN User ON Task.user=User.userID WHERE username=?"
+    : "SELECT taskID, username, title as taskTitle, done, dueDate FROM Task INNER JOIN User ON Task.user=User.userID";
+  console.log(username);
   res.writeHead(StatusCodes.OK, contentTypes.json);
-  return res.json(
-    db.Tasks.map((task) => {
-      return {
-        title: task.title,
-        duer: db.Users.find((user) => user.id === task.user).username,
-      };
-    })
-  );
+  db.all(dbQuery, username, (err, tasks) => {
+    if (err) {
+      return utils.errResponse(res, err.message);
+    } else {
+      return res.json(tasks);
+    }
+  });
 };
 
 exports.todoDetail = (req, res) => {
