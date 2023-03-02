@@ -2,6 +2,7 @@ const express = require("express");
 const { userRouter } = require("./routes");
 
 const app = express();
+app.use(express.json());
 
 function log(req, res, next) {
   console.log("ye darkhst umad!");
@@ -10,9 +11,7 @@ function log(req, res, next) {
 
 // app.use(log);
 
-app.use("/user", log, userRouter);
-
-///ModelViewController ====> MVC
+app.use("/user", userRouter);
 
 app.get("/category", async (req, res) => {
   try {
