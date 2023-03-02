@@ -1,12 +1,16 @@
 const express = require("express");
-const { PrismaClient } = require("@prisma/client");
+const { userRouter } = require("./routes");
 
 const app = express();
-const prisma = new PrismaClient();
 
-const { userController } = require("./controller").userApp;
+function log(req, res, next) {
+  console.log("ye darkhst umad!");
+  next();
+}
 
-app.get("/user/:id", userController.get);
+// app.use(log);
+
+app.use("/user", log, userRouter);
 
 ///ModelViewController ====> MVC
 
