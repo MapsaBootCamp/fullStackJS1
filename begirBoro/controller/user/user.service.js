@@ -11,6 +11,32 @@ function updatedPermittedData(data) {
   ];
   for (const key of permittedKeyChange) {
     if (data.hasOwnProperty(key)) {
+      if (key === "sex") {
+        result[key] = data[key] ? true : false;
+        continue;
+      }
+      result[key] = data[key];
+    }
+  }
+  return result;
+}
+
+function createPermittedData(data) {
+  const result = {};
+  const permittedKeyChange = [
+    "email",
+    "password",
+    "sex",
+    "address",
+    "driveLicense",
+    "weight",
+  ];
+  for (const key of permittedKeyChange) {
+    if (data.hasOwnProperty(key)) {
+      if (key === "sex") {
+        result[key] = data[key] ? true : false;
+        continue;
+      }
       result[key] = data[key];
     }
   }
@@ -29,13 +55,37 @@ const userService = {
   getAll: async () => {
     return await db.user.findMany();
   },
-  update: async function (id, data) {
+  create: async (data) => {
     try {
-      const user = await this.getById(parseInt(id));
-      console.log(updatedPermittedData(data));
-      return updatedPermittedData(data);
+      const user = await db.user.create({
+        data: createPermittedData(data),
+      });
+      return user.id;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
+  update: async (id, data) => {
+    try {
+      const result = await db.user.update({
+        where: { id: parseInt(id) },
+        data: updatedPermittedData(data),
+      });
+      return result;
     } catch (error) {
       console.log(error.message);
+      throw new Error(error.message);
+    }
+  },
+  delete: async (id) => {
+    try {
+      return await db.user.delete({
+        where: {
+          id: parseInt(id),
+        },
+      });
+    } catch (error) {
+      throw new Error(error.message);
     }
   },
 };

@@ -35,7 +35,7 @@ app.get(`/category/:id`, async (req, res) => {
   res.json(category);
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 
 app.listen(PORT, () => {
   console.log(`server run on por ${PORT}`);
