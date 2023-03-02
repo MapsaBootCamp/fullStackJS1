@@ -1,7 +1,12 @@
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
+
 const app = express();
 const prisma = new PrismaClient();
+
+const { userController } = require("./controller").userApp;
+
+app.get("/user/:id", userController.get);
 
 ///ModelViewController ====> MVC
 
@@ -20,7 +25,7 @@ app.get("/category", async (req, res) => {
 app.get(`/category/:id`, async (req, res) => {
   const { id } = req.params;
   console.log(req.query);
-  
+
   const category = await prisma.category.findUnique({
     where: { id: parseInt(id) },
   });
