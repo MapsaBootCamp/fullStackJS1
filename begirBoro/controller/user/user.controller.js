@@ -17,6 +17,7 @@ const userController = {
   },
   create: async (req, res) => {
     try {
+      console.log(req.body);
       const userId = await userService.create(req.body);
       return res.status(201).send({
         userId,
