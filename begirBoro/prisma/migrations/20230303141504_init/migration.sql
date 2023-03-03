@@ -8,7 +8,8 @@ CREATE TABLE "User" (
     "password" TEXT,
     "weight" INTEGER,
     "driveLicense" BOOLEAN NOT NULL,
-    "address" TEXT NOT NULL
+    "address" TEXT NOT NULL,
+    "sex" BOOLEAN
 );
 
 -- CreateTable
@@ -18,30 +19,30 @@ CREATE TABLE "Category" (
 );
 
 -- CreateTable
-CREATE TABLE "Product" (
+CREATE TABLE "Vehicle" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
-    "pelak" TEXT NOT NULL,
     "categoryId" INTEGER NOT NULL,
+    "pelak" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    CONSTRAINT "Product_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Vehicle_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "Rent" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "userId" INTEGER NOT NULL,
-    "productId" INTEGER NOT NULL,
+    "vehicleId" INTEGER NOT NULL,
     CONSTRAINT "Rent_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "Rent_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Rent_vehicleId_fkey" FOREIGN KEY ("vehicleId") REFERENCES "Vehicle" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Product_pelak_key" ON "Product"("pelak");
+CREATE UNIQUE INDEX "Vehicle_pelak_key" ON "Vehicle"("pelak");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Rent_productId_key" ON "Rent"("productId");
+CREATE UNIQUE INDEX "Rent_vehicleId_key" ON "Rent"("vehicleId");

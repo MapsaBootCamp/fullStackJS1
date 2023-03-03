@@ -18,16 +18,16 @@ model User {
     driveLicense Boolean
     address      String
     sex          Boolean?
-    product      Rent[]
+    vehicle      Rent[]
 }
 
 model Category {
     id       Int       @id @default(autoincrement())
     title    String
-    products Product[]
+    vehicles Vehicle[]
 }
 
-model Product {
+model Vehicle {
     id         Int      @id @default(autoincrement())
     createdAt  DateTime @default(now())
     updatedAt  DateTime @updatedAt
@@ -44,6 +44,6 @@ model Rent {
     User   User @relation(fields: [userId], references: [id])
     userId Int
 
-    Product   Product @relation(fields: [productId], references: [id])
-    productId Int     @unique
+    Vehicle   Vehicle @relation(fields: [vehicleId], references: [id])
+    vehicleId Int     @unique
 }

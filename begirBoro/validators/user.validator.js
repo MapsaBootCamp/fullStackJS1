@@ -4,16 +4,19 @@ const db = require("../db");
 exports.userCreateValidator = [
   body("email").isEmail().trim().escape(),
   check("email").custom(async (val) => {
-    if (
-      await db.user.findFirst({
+    try {
+      const user = await db.user.findFirst({
         where: {
           email: val,
         },
-      })
-    ) {
-      return Promise.reject("chenin useri darim!");
+      });
+      if (user) {
+        return Promise.reject("chenin useri darim!");
+      }
+      return val;
+    } catch (error) {
+      return Promise.reject(error.message);
     }
-    return val;
   }),
   check("address").custom((val) => {
     if (val !== "tehran") {

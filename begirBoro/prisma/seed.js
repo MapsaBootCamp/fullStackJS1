@@ -18,7 +18,7 @@ const userData = [
 const categoryData = [
   {
     title: "docharkhe",
-    products: {
+    vehicles: {
       create: [
         {
           pelak: "123456",
@@ -33,7 +33,7 @@ const categoryData = [
   },
   {
     title: "machine",
-    products: {
+    vehicles: {
       create: [
         {
           pelak: "123-99",
@@ -48,7 +48,7 @@ const categoryData = [
   },
   {
     title: "motor",
-    products: {
+    vehicles: {
       create: [
         {
           pelak: "12-10",

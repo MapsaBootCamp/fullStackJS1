@@ -1,0 +1,8 @@
+online queize:
+
+
+Week2:
+    1. models ===> category, question, user, exam, ....
+
+
+# TODO: vehicle ===> getList ===> +filter(query params) ===> category, name
