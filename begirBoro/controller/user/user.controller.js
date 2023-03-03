@@ -1,6 +1,31 @@
 const userService = require("./user.service");
+const bcrypt = require("bcrypt");
 
 const userController = {
+  login: async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      const user = await userService.getByUsername(username);
+      if (!user) {
+        return res.status(403).json({
+          message: "invalid credential!",
+        });
+      }
+      console.log("pass", password);
+      console.log("db pass", user.password);
+      const validPass = await bcrypt.compare(password, user.password);
+      if (!validPass)
+        return res.status(403).json({
+          message: "invalid credential!",
+        });
+      return res.json("login shodi!");
+    } catch (error) {
+      return res.json({
+        error: true,
+        message: error.message,
+      });
+    }
+  },
   get: async (req, res) => {
     const { id } = req.params;
     const user = await userService.getById(parseInt(id));
@@ -17,8 +42,13 @@ const userController = {
   },
   create: async (req, res) => {
     try {
-      console.log(req.body);
-      const userId = await userService.create(req.body);
+      const { password } = req.body;
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      const userId = await userService.create({
+        ...req.body,
+        password: hashedPassword,
+      });
       return res.status(201).send({
         userId,
       });

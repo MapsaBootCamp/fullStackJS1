@@ -12,6 +12,7 @@ function logUserRoute(req, res, next) {
 
 router.use(logUserRoute);
 
+router.post("/login", userController.login);
 router.get("/", userController.getAll);
 router.post(
   "/",

@@ -44,6 +44,14 @@ function createPermittedData(data) {
 }
 
 const userService = {
+  authenticate: async (username, password) => {},
+  getByUsername: async (username) => {
+    return await db.user.findUnique({
+      where: {
+        email: username,
+      },
+    });
+  },
   getById: async (id) => {
     return await db.user.findUnique({
       where: {
