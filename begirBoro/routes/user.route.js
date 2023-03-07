@@ -3,6 +3,7 @@ const { userController } = require("../controller").userApp;
 const { body, validationResult } = require("express-validator");
 const checkError = require("../middlewares/validator");
 const { userValidator } = require("../validators");
+
 const router = express.Router();
 
 function logUserRoute(req, res, next) {

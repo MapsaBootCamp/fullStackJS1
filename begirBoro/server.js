@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const { userRouter, vehicleRouter } = require("./routes");
 
@@ -13,6 +14,20 @@ function log(req, res, next) {
 
 app.use("/user", userRouter);
 app.use("/vehicle", vehicleRouter);
+
+app.get("/error", (req, res) => {
+  throw new Error("Error rokh dad");
+});
+
+//// TODO: modular!
+app.use((error, req, res, next) => {
+  console.log(error.message);
+  res.end(error.message);
+});
+
+app.use((req, res) => {
+  res.send("NOT FOUND!");
+});
 
 const PORT = process.env.PORT || 3002;
 
