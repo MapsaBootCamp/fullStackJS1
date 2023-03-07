@@ -17,7 +17,7 @@ exports.tokenAuthentication = async (req, res, next) => {
   try {
     const { username } = jwt.verify(token, process.env.SECRET_KEY);
 
-    const user = await userService.getUserInfoByUsername(username);
+    const user = await userService.getByUsername(username);
     req.user = user;
     next();
   } catch (error) {
