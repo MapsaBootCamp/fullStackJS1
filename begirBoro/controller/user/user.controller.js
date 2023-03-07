@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const userController = {
   login: async (req, res) => {
+    console.log("header ", req.headers);
     try {
       const { username, password } = req.body;
       const user = await userService.getByUsername(username);

@@ -21,8 +21,8 @@ router.post(
   checkError,
   userController.create
 );
-router.get("/:id", userController.get);
-router.put("/:id", userController.update);
-router.delete("/:id", userController.delete);
+router.get("/:id/info", userController.get);
+router.put("/:id/update", userController.update);
+router.delete("/:id/remove", userController.delete);
 
 module.exports = router;
