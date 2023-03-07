@@ -39,6 +39,7 @@ const userController = {
     return res.json(user);
   },
   getAll: async (req, res) => {
+    console.log(req.user);
     const user = await userService.getAll();
     return res.json(user);
   },

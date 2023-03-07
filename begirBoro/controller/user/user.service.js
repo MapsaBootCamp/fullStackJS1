@@ -1,4 +1,5 @@
 const db = require("../../db");
+const { userInfoDao } = require("./user.dao");
 
 function updatedPermittedData(data) {
   const result = {};
@@ -45,6 +46,10 @@ function createPermittedData(data) {
 
 const userService = {
   authenticate: async (username, password) => {},
+  getUserInfoByUsername: async function (username) {
+    const user = await this.getByUsername(username);
+    return userInfoDao(user);
+  },
   getByUsername: async (username) => {
     return await db.user.findUnique({
       where: {

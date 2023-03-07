@@ -3,7 +3,7 @@ const { userController } = require("../controller").userApp;
 const { body, validationResult } = require("express-validator");
 const checkError = require("../middlewares/validator");
 const { userValidator } = require("../validators");
-
+const { tokenAuthentication } = require("../middlewares/auth");
 const router = express.Router();
 
 function logUserRoute(req, res, next) {
@@ -14,7 +14,7 @@ function logUserRoute(req, res, next) {
 router.use(logUserRoute);
 
 router.post("/login", userController.login);
-router.get("/", userController.getAll);
+router.get("/", tokenAuthentication, userController.getAll);
 router.post(
   "/",
   userValidator.userCreateValidator,
