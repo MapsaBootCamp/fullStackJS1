@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
-    url      = "file:./dev.db"
+    provider = "postgresql"
+    url      = env("DB_URL")
 }
 
 model User {
@@ -35,20 +35,21 @@ model Vehicle {
     categoryId Int
     pelak      String   @unique
     title      String
+    basePrice  Int?     @default(100)
     //// 0: available, 1: rent, 2: repair
     status     Int      @default(0)
     Rent       Rent[]
 }
 
 model Rent {
-    id           Int      @id @default(autoincrement())
-    createdAt    DateTime @default(now())
-    updatedAt    DateTime @updatedAt
+    id           Int       @id @default(autoincrement())
+    createdAt    DateTime  @default(now())
+    updatedAt    DateTime  @updatedAt
     reservedDate DateTime
     dueDate      DateTime
-    returnDate   DateTime
+    returnDate   DateTime?
     price        Int
-    User         User     @relation(fields: [userId], references: [id])
+    User         User      @relation(fields: [userId], references: [id])
     userId       Int
 
     Vehicle   Vehicle @relation(fields: [vehicleId], references: [id])

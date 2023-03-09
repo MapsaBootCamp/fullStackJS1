@@ -10,6 +10,7 @@ const vehicleService = {
         id: true,
         title: true,
         pelak: true,
+        status: true,
         Category: {
           select: {
             title: true,

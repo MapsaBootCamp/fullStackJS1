@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const { userRouter, vehicleRouter } = require("./routes");
+const { userRouter, vehicleRouter, rentRouter } = require("./routes");
 
 const app = express();
 app.use(express.json());
@@ -14,6 +14,7 @@ function log(req, res, next) {
 
 app.use("/user", userRouter);
 app.use("/vehicle", vehicleRouter);
+app.use("/rent", rentRouter);
 
 app.get("/error", (req, res) => {
   throw new Error("Error rokh dad");

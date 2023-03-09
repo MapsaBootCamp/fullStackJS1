@@ -14,13 +14,10 @@ function logUserRoute(req, res, next) {
 router.use(logUserRoute);
 
 router.post("/login", userController.login);
-router.get("/", tokenAuthentication, userController.getAll);
-router.post(
-  "/",
-  userValidator.userCreateValidator,
-  checkError,
-  userController.create
-);
+router
+  .route("/")
+  .get(tokenAuthentication, userController.getAll)
+  .post(userValidator.userCreateValidator, checkError, userController.create);
 router.get("/:id/info", userController.get);
 router.put("/:id/update", userController.update);
 router.delete("/:id/remove", userController.delete);
