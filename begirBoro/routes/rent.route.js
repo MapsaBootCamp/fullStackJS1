@@ -14,4 +14,10 @@ router.post(
   rentApp.rentController.makeRent
 );
 
+router.get(
+  "/history",
+  tokenAuthentication,
+  rentApp.rentController.getUserRentHistory
+);
+
 module.exports = router;

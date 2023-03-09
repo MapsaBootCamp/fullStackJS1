@@ -24,6 +24,15 @@ const rentController = {
       throw new Error(error.message);
     }
   },
+
+  getUserRentHistory: async (req, res) => {
+    try {
+      const rentHistory = await rentService.getUserRentHistory(req.user.id);
+      return res.status(200).json(rentHistory);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
 };
 
 module.exports = rentController;

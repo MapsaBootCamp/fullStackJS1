@@ -1,4 +1,5 @@
 const db = require("../../db");
+const { exclude } = require("../../utils/prisma.util");
 
 const rentService = {
   addVehicleToUser: async (rentData) => {
@@ -25,7 +26,27 @@ const rentService = {
         }),
       ]);
 
-      return rent;
+      return exclude(rent, ["userId"]);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
+  getUserRentHistory: async (userId) => {
+    try {
+      const result = await db.rent.findMany({
+        where: {
+          userId,
+        },
+        include: {
+          Vehicle: {
+            select: {
+              pelak: true,
+              title: true,
+            },
+          },
+        },
+      });
+      return result.map((res) => exclude(res, ["userId"]));
     } catch (error) {
       throw new Error(error.message);
     }
