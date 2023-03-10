@@ -14,6 +14,14 @@ router.post(
   rentApp.rentController.makeRent
 );
 
+router.post(
+  "/check-back",
+  tokenAuthentication,
+  rentValidators.returnVehicleValidator,
+  checkError,
+  rentApp.rentController.returnVehicle
+);
+
 router.get(
   "/history",
   tokenAuthentication,
