@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  web_app: 
+    
+  postgreDB: 
+    image: postgres
+    container_name: postgres_begirboro
+    ports:
+      - 5433:5432
+    volumes:
+      - begirboro:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+volumes:
+  begirboro:

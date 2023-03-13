@@ -1,37 +1,20 @@
-require("dotenv").config();
-const express = require("express");
-const { userRouter, vehicleRouter, rentRouter } = require("./routes");
+const db = require("./db");
+const ExpressLoader = require("./loaders/expressLoader");
 
-const app = express();
-app.use(express.json());
-
-function log(req, res, next) {
-  console.log("ye darkhst umad!");
-  next();
+async function connectionCheck() {
+  await db.$connect();
 }
 
-// app.use(log);
-
-app.use("/user", userRouter);
-app.use("/vehicle", vehicleRouter);
-app.use("/rent", rentRouter);
-
-app.get("/error", (req, res) => {
-  throw new Error("Error rokh dad");
-});
-
-//// TODO: modular!
-app.use((error, req, res, next) => {
-  console.log(error.message);
-  res.end(error.message);
-});
-
-app.use((req, res) => {
-  res.send("NOT FOUND!");
-});
-
-const PORT = process.env.PORT || 3002;
-
-app.listen(PORT, () => {
-  console.log(`server run on por ${PORT}`);
-});
+(function main() {
+  connectionCheck()
+    .then(async () => {
+      console.log("connect to DB!");
+      const app = new ExpressLoader();
+      app.run();
+    })
+    .catch(async (e) => {
+      console.error(e);
+      await db.$disconnect();
+      // process.exit(1);
+    });
+})();

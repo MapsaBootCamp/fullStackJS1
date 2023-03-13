@@ -1,5 +1,5 @@
 const express = require("express");
-const { vehicleController } = require("../controller").vehicleApp;
+const { vehicleController } = require("../modules").vehicleApp;
 
 const router = express.Router();
 

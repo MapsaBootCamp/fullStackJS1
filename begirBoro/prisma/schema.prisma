@@ -18,6 +18,7 @@ model User {
     driveLicense Boolean
     address      String
     sex          Boolean?
+    role         Role     @default(USER)
     vehicle      Rent[]
 }
 
@@ -54,4 +55,9 @@ model Rent {
 
     Vehicle   Vehicle @relation(fields: [vehicleId], references: [id])
     vehicleId Int
+}
+
+enum Role {
+    USER
+    ADMIN
 }

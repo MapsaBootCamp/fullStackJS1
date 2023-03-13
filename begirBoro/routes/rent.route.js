@@ -1,5 +1,5 @@
 const express = require("express");
-const { rentApp } = require("../controller");
+const { rentApp } = require("../modules");
 const { tokenAuthentication } = require("../middlewares/auth");
 const checkError = require("../middlewares/validator");
 const { rentValidators } = require("../validators");

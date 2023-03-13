@@ -5,7 +5,7 @@
       "server": "localhost",
       "port": 5433,
       "driver": "PostgreSQL",
-      "name": "begirboro",
+      "name": "begir boro",
       "database": "begirboro",
       "username": "mapsa",
       "password": "mapsa1234"
