@@ -1,6 +1,8 @@
+const generateError = require("../../utils/generateError");
 const { login } = require("../user/user.controller");
 const { vehicleService } = require("../vehicle");
 const rentService = require("./rent.service");
+
 const rentController = {
   makeRent: async (req, res) => {
     try {
@@ -53,6 +55,15 @@ const rentController = {
     } catch (error) {
       console.log(error.message);
       throw new Error(error.message);
+    }
+  },
+  getAveragePrice: async (req, res) => {
+    try {
+      const result = await rentService.rentAveragePrice();
+      return res.status(200).send(result);
+    } catch (error) {
+      error = generateError(error, 500);
+      throw error;
     }
   },
 };

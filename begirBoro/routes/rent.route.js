@@ -1,8 +1,9 @@
 const express = require("express");
 const { rentApp } = require("../modules");
-const { tokenAuthentication } = require("../middlewares/auth");
+const { tokenAuthentication, adminCheck } = require("../middlewares/auth");
 const checkError = require("../middlewares/validator");
 const { rentValidators } = require("../validators");
+const { route } = require("express/lib/application");
 
 const router = express.Router();
 
@@ -26,6 +27,13 @@ router.get(
   "/history",
   tokenAuthentication,
   rentApp.rentController.getUserRentHistory
+);
+
+router.get(
+  "/rent-price-avg",
+  tokenAuthentication,
+  adminCheck,
+  rentApp.rentController.getAveragePrice
 );
 
 module.exports = router;

@@ -86,6 +86,13 @@ const rentService = {
       throw new Error(error.message);
     }
   },
+  rentAveragePrice: async () => {
+    return await db.rent.aggregate({
+      _avg: {
+        price: true,
+      },
+    });
+  },
 };
 
 module.exports = rentService;
