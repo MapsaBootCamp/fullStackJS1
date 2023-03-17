@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:../db.sqlite"
+}
+
+model Category {
+  id               Int        @id @default(autoincrement())
+  title            String
+  subCategories    Category[] @relation("SubCategory")
+  parentCategory   Category?  @relation("SubCategory", fields: [parentCategoryId], references: [id])
+  parentCategoryId Int?
+  products         Product[]
+}
+
+model Tag {
+  id       Int             @id @default(autoincrement())
+  title    String
+  products TagsonProduct[]
+}
+
+model Product {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  Category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId Int?
+
+  tags TagsonProduct[]
+}
+
+model TagsonProduct {
+  Tag   Tag @relation(fields: [tagId], references: [id])
+  tagId Int
+
+  Product   Product @relation(fields: [productId], references: [id])
+  productId Int
+
+  createdAt DateTime @default(now())
+
+  @@id([tagId, productId])
+}
