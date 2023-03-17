@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const userController = {
-  login: async (req, res) => {
+  login: async (req, res, next) => {
     console.log("header ", req.headers);
     try {
       const { username, password } = req.body;
@@ -27,10 +27,12 @@ const userController = {
         access_token: token,
       });
     } catch (error) {
-      return res.json({
-        error: true,
-        message: error.message,
-      });
+      // return res.json({
+      //   error: true,
+      //   message: error.message,
+      // });
+      error.status = 500;
+      next(error);
     }
   },
   get: async (req, res) => {

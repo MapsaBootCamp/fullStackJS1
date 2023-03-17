@@ -7,9 +7,10 @@ class ExpressLoader {
   constructor() {
     this.app = express();
     this.app.use(express.json());
+    const apiRoute = express.Router();
+    router(apiRoute);
 
-    router(this.app);
-
+    this.app.use("/api", apiRoute);
     this.app.get("/error", (req, res) => {
       throw new Error("Error rokh dad");
     });

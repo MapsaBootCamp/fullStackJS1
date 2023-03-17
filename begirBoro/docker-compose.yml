@@ -1,8 +1,7 @@
 version: "3.7"
 
 services:
-  web_app: 
-    
+
   postgreDB: 
     image: postgres
     container_name: postgres_begirboro
