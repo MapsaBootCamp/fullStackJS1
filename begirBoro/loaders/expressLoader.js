@@ -14,7 +14,8 @@ class ExpressLoader {
     /// application/xwww
     this.app.use(express.urlencoded({ extended: true }));
     /// form/multipart
-    this.app.use(multer({ dest: "./uploads/" }).array("pic"));
+    this._multerConfig();
+
     this.app.use(
       cors({
         origin: "*",
@@ -29,9 +30,18 @@ class ExpressLoader {
 
     this.app.post("/form", (req, res, next) => {
       console.log(req.body);
-      console.log(req.files);
       return res.end("form endpoint!");
     });
+
+    this.app.post(
+      "/upload",
+      this.uploadMulterInstance.single("file"),
+      (req, res, next) => {
+        console.log(req.body);
+        return res.end("file uploaded successfully!");
+      }
+    );
+
     this.app.get("/error", (req, res) => {
       throw new Error("Error rokh dad");
     });
@@ -45,6 +55,21 @@ class ExpressLoader {
       });
     });
   }
+
+  _multerConfig() {
+    const storage = multer.diskStorage({
+      destination: (req, file, cb) => {
+        console.log("file size in multer", req.file.size);
+        console.log("file type:", file.mimetype);
+        cb(null, "uploads/");
+      },
+      filename: (req, file, cb) => {
+        cb(null, `image-${new Date().getTime()}-${file.originalname}`);
+      },
+    });
+    this.uploadMulterInstance = multer({ storage });
+  }
+
   run() {
     this.app.listen(config.PORT, () => {
       console.log(`server run on por ${config.PORT}`);

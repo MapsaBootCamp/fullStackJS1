@@ -1,23 +1,24 @@
-import { graphql, buildSchema } from "graphql";
-var { graphqlHTTP } = require("express-graphql");
+import { graphqlHTTP } from "express-graphql";
 import * as express from "express";
+import schema from "./graphql/schema";
 
 const app: express.Express = express();
 
-var schema = buildSchema(`
-  type Query {
-    users: [String]
-  }
-`);
+type reqType = express.Request & {
+  user: string;
+};
 
-const resolver = { users: () => ["Ashkan", "Gholam"] };
+app.use((req: reqType, res, next) => {
+  console.log("sallam");
+  req.user = "Ashkan";
+  next();
+});
 
 app.use(
   "/graphql",
   graphqlHTTP({
     schema,
-    rootValue: resolver,
-    graphiql: true,
+    graphiql: process.env.ENV_MODE !== "production",
   })
 );
 
