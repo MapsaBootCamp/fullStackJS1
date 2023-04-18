@@ -1,4 +1,5 @@
 import {
+  GraphQLID,
   GraphQLInputObjectType,
   GraphQLInt,
   GraphQLList,
@@ -7,6 +8,8 @@ import {
   GraphQLString,
 } from "graphql";
 import { authors, books } from "../db";
+import { Author } from "../models/author";
+import { Book } from "../models/book";
 
 const BookTypeInAuthor = new GraphQLObjectType({
   name: "BookTypeInAuthor",
@@ -31,11 +34,31 @@ export const AuthorType = new GraphQLObjectType({
   name: "authorType",
   description: "type authors",
   fields: {
-    id: { type: GraphQLNonNull(GraphQLInt) },
+    id: { type: GraphQLNonNull(GraphQLID) },
     name: { type: GraphQLString },
+    description: { type: GraphQLString },
     books: {
       type: GraphQLList(BookTypeInAuthor),
-      resolve: (parent) => books.filter((book) => book.authorId === parent.id),
+      resolve: async (parent) => {
+        try {
+          return await Book.find({ author: parent.id });
+        } catch (error) {
+          throw new Error(error);
+        }
+      },
+    },
+  },
+});
+
+export const BookListType = new GraphQLObjectType({
+  name: "BookListType",
+  description: "type books in a list",
+  fields: {
+    id: { type: GraphQLNonNull(GraphQLID) },
+    name: { type: GraphQLString },
+    page: { type: GraphQLInt },
+    author: {
+      type: AuthorType,
     },
   },
 });
@@ -44,14 +67,20 @@ export const BookType = new GraphQLObjectType({
   name: "bookType",
   description: "type books",
   fields: {
-    id: { type: GraphQLNonNull(GraphQLInt) },
+    id: { type: GraphQLNonNull(GraphQLID) },
     name: { type: GraphQLString },
     page: { type: GraphQLInt },
     // authorId: { type: GraphQLInt },
     author: {
       type: AuthorType,
-      resolve: (parent) =>
-        authors.find((author) => parent.authorId === author.id),
+      resolve: async (parent) => {
+        try {
+          console.log("author");
+          return await Author.findById(parent.author);
+        } catch (error) {
+          throw new Error(error);
+        }
+      },
     },
   },
 });
