@@ -1,6 +1,6 @@
 import { GraphQLObjectType, GraphQLSchema } from "graphql";
-import { addBook, editBook } from "./mutation";
-import { booksQuery, bookQuery, authorsQuery } from "./query";
+import { addAuthor, addBook, editBook } from "./mutation";
+import { booksQuery, bookQuery, authorsQuery, authorQuery } from "./query";
 
 const rootQuery = new GraphQLObjectType({
   name: "Query",
@@ -9,6 +9,7 @@ const rootQuery = new GraphQLObjectType({
     books: booksQuery,
     book: bookQuery,
     authors: authorsQuery,
+    author: authorQuery,
   },
 });
 
@@ -18,6 +19,7 @@ const rootMutation = new GraphQLObjectType({
   fields: {
     addBook,
     editBook,
+    addAuthor,
   },
 });
 
