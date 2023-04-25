@@ -1,0 +1,26 @@
+extends layout
+
+
+block content
+  h2 Add Address
+
+  form(action="/add-address",method="post")
+    div
+      label Label
+      <input type="radio" id="html" name="label" value="Home">
+      <label for="html">Home</label><br>
+      <input type="radio" id="css" name="label" value="Work">
+      <label for="css">Work</label><br>
+      <input type="radio" id="javascript" name="label" value="Yejai">
+      <label for="javascript">Yejai</label>
+
+    div
+      label City
+      input(type="text",name="city")
+
+    div
+      label Street
+      input(type="text",name="street")
+
+    div
+      input(type="submit",value="Add Address")

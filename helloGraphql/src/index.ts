@@ -63,7 +63,7 @@ app
       failureRedirect: "/login",
       failureFlash: true,
     }),
-    (req, res) => {
+    (req: reqType, res) => {
       console.log(req);
       return res.redirect("/");
     }

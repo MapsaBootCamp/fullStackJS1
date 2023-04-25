@@ -5,7 +5,6 @@ import {
   GraphQLNonNull,
   GraphQLObjectType,
 } from "graphql";
-import { books, authors } from "../db";
 import { AuthorType, BookListType, BookType } from "./types";
 import { Author } from "../models/author";
 import { Book } from "../models/book";
