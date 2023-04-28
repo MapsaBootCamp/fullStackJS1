@@ -1,6 +1,7 @@
 const userService = require("./user.service");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const catchAsync = requrire("../../utils/catchAsync.js");
 
 const userController = {
   login: async (req, res, next) => {
@@ -35,11 +36,13 @@ const userController = {
       next(error);
     }
   },
-  get: async (req, res) => {
+
+  get: catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const user = await userService.getById(parseInt(id));
     return res.json(user);
-  },
+  }),
+
   getAll: async (req, res) => {
     try {
       console.log(req.user);
