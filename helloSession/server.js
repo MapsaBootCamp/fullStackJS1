@@ -6,20 +6,27 @@ const expressSession = require("express-session");
 const passport = require("passport");
 const flash = require("connect-flash");
 const User = require("./models/user");
+const Book = require("./models/book");
 const redis = require("redis");
 const RedisStore = require("connect-redis").default;
-
+// const setTz = require("set-tz");
 const redisClient = redis.createClient();
 redisClient.connect().catch(console.error);
 const redisStoreSession = new RedisStore({ client: redisClient });
 
+// process.env.TZ = "Asia/Tehran";
+// setTz("Asia/Tehran");
+
+console.log(new Date().toString());
 async function testRedis() {
-  await redisClient.connect();
-  await redisClient.set("camp", "mapsa");
-  const phone = "91212345678";
-  await redisClient.set(`phone:${phone}`, "6532", { EX: 2 * 60 });
-  await redisClient.set("phoneNumber", "9121234567");
-  return "OK";
+  // await redisClient.connect();
+  // await redisClient.set("camp", "mapsa");
+  // const phone = "91212345678";
+  // await redisClient.set(`phone:${phone}`, "6532", { EX: 2 * 60 });
+  // await redisClient.set("phoneNumber", "9121234567");
+  // return "OK";
+  // console.log(await redisClient.lRange("users", 0, -1));
+  // console.log(await redisClient.hGetAll("user"));
 }
 
 // testRedis().then((msg) => console.log(msg));
@@ -30,15 +37,24 @@ db.once("open", () => console.log("connected to DB"));
 
 const app = express();
 
+const hour = 3600000;
+
 app.use(express.urlencoded({ extended: false }));
+
 app.use(cookieParser("MyKey"));
+app.use(express.static(path.join(__dirname, "public")));
+
 app.use(
   expressSession({
     store: redisStoreSession,
     secret: "MyKey",
     resave: false,
     saveUninitialized: false,
-    maxAge: 400 * 1000,
+    cookie: {
+      // secure: true, /// https
+      // expires: new Date(Date.now() + hour),
+      maxAge: hour,
+    },
   })
 );
 
@@ -55,10 +71,11 @@ app.use(flash());
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
-app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
-  console.log(req.user);
+  /// anonymous ====> cart
+  req.session.cart = ["Cat", "Dog"];
+  res.cookie("camp", "mapsa", { maxAge: 300000 });
   return res.render("home", {
     user: req.user,
     message: req.flash("info"),
@@ -68,13 +85,11 @@ app.get("/", (req, res) => {
 app
   .route("/login")
   .get((req, res) => {
+    console.log(req.cookies);
     return res.render("login", { message: req.flash("error")[0] });
   })
   .post(
     passport.authenticate("local", {
-      successRedirect: "/",
-      successMessage: "succefully logined!",
-      successFlash: true,
       failureRedirect: "/login",
       failureFlash: true,
     }),
@@ -87,6 +102,26 @@ app
 app.get("/logout", (req, res) => {
   req.logout({}, (err) => {});
   return res.redirect("/");
+});
+
+app.get("/author-total-page", async (req, res) => {
+  const result = await Book.aggregate([
+    {
+      $match: {},
+    },
+    {
+      $group: { _id: "$author", totalPage: { $sum: "$page" } },
+    },
+    {
+      $lookup: {
+        from: "books",
+        localField: "_id",
+        foreignField: "_id",
+        as: "authorName",
+      },
+    },
+  ]);
+  return res.end(JSON.stringify(result));
 });
 
 app
