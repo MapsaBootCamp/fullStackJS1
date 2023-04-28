@@ -104,22 +104,38 @@ app.get("/logout", (req, res) => {
   return res.redirect("/");
 });
 
+////// aggregation pipline ====> $match, $expr, $group, $project, $lookup, $unwind
+
 app.get("/author-total-page", async (req, res) => {
   const result = await Book.aggregate([
     {
       $match: {},
     },
     {
-      $group: { _id: "$author", totalPage: { $sum: "$page" } },
+      $group: {
+        _id: "$author",
+        totalPage: { $sum: "$page" },
+        bookCount: { $sum: 1 },
+      },
     },
     {
       $lookup: {
-        from: "books",
+        from: "authors",
         localField: "_id",
         foreignField: "_id",
         as: "authorName",
       },
     },
+    {
+      $unwind: "$authorName",
+    },
+    // {
+    //   $project: {
+    //     _id: 0,
+    //     authorName: "$authorName.name",
+    //     pageByAuthor: "$totalPage",
+    //   },
+    // },
   ]);
   return res.end(JSON.stringify(result));
 });
