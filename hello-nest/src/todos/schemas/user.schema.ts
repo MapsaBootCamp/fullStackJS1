@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Exclude, Expose } from 'class-transformer';
 import { HydratedDocument } from 'mongoose';
 import { TodoCategory } from '../todo.enum';
 
@@ -21,6 +22,14 @@ class Todo {
 
 @Schema()
 export class User {
+  @Prop()
+  @Exclude()
+  _id: string;
+
+  @Expose({ name: 'id' })
+  id(): string {
+    return this._id.toString();
+  }
   @Prop({ unique: true, required: true })
   username: string;
 

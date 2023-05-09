@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpCode,
+  Inject,
   Param,
   ParseEnumPipe,
   Post,
@@ -16,7 +17,10 @@ import { TodoService } from './todo.service';
 
 @Controller()
 export class TodoController {
-  constructor(private readonly todoService: TodoService) {}
+  constructor(
+    private readonly todoService: TodoService,
+    @Inject('MOCKDATA') private readonly mockData,
+  ) {}
 
   @HttpCode(201)
   @Post('register')
@@ -25,11 +29,10 @@ export class TodoController {
   }
 
   @Get('users')
-  async getUserList(): Promise<UserResponseDto> {
-    const user = await this.todoService.userList();
-    console.log(user[0]);
+  async getUserList(): Promise<UserResponseDto[]> {
+    const users = await this.todoService.userList();
 
-    return new UserResponseDto(user[0]);
+    return users.map((user) => new UserResponseDto(user));
   }
 
   @Get('todos/:typeTodo/:userId')
@@ -37,6 +40,7 @@ export class TodoController {
     @Param('userId') userId: string,
     @Param('typeTodo', new ParseEnumPipe(TodoCategory)) typeTodo: TodoCategory,
   ) {
+    console.log(this.mockData);
     return await this.todoService.getUserTodos(userId, typeTodo);
   }
 

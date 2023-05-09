@@ -1,12 +1,16 @@
 import { Exclude, Expose } from 'class-transformer';
-import { User } from '../schemas/user.schema';
 
 export class UserResponseDto {
   @Exclude()
-  _id: string;
+  _id: any;
+
+  @Expose({ name: 'userId' })
+  userId() {
+    return this._id.toString();
+  }
   username: string;
 
-  constructor(private user: Partial<User>) {
+  constructor(user: Partial<UserResponseDto>) {
     Object.assign(this, user);
   }
 }
