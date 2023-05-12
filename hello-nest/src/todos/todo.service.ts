@@ -3,8 +3,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { LoggerService } from 'src/logger/logger.service';
 import { TodoCreateDto } from './dtos/todo-create.dto';
-import { User } from './schemas/user.schema';
+import { User, UserDocument } from './schemas/user.schema';
 import { TodoCategory } from './todo.enum';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class TodoService {
@@ -16,6 +17,15 @@ export class TodoService {
   getName(): string {
     return 'DATA';
   }
+
+  async getUserById(id: string): Promise<UserDocument> {
+    return await this.User.findById(id);
+  }
+
+  async getUser(username: string): Promise<UserDocument> {
+    return await this.User.findOne({ username });
+  }
+
   async userList(): Promise<User[]> {
     return await this.User.find(
       {},
@@ -25,8 +35,13 @@ export class TodoService {
       },
     ).lean();
   }
-  async createUser(username: string): Promise<User> {
-    return await this.User.create({ username });
+  async createUser(username: string, password: string): Promise<User> {
+    const hashedPass = await bcrypt.hash(password, 10);
+    const userDocument = await this.User.create({
+      username,
+      password: hashedPass,
+    });
+    return userDocument.toJSON();
   }
 
   async addTodo(userId: string, todoCreateDto: TodoCreateDto): Promise<User> {

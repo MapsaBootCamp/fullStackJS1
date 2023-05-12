@@ -5,6 +5,11 @@ import { TodoCategory } from '../todo.enum';
 
 export type UserDocument = HydratedDocument<User>;
 
+export enum Role {
+  USER = 'user',
+  ADMIN = 'admin',
+}
+
 @Schema({ _id: false })
 class Todo {
   @Prop({ required: true })
@@ -22,19 +27,17 @@ class Todo {
 
 @Schema()
 export class User {
-  @Prop()
-  @Exclude()
-  _id: string;
-
-  @Expose({ name: 'id' })
-  id(): string {
-    return this._id.toString();
-  }
   @Prop({ unique: true, required: true })
   username: string;
 
+  @Prop({ minlength: [6, 'password too short!'] })
+  password: string;
+
   @Prop([Todo])
   todos: Todo[];
+
+  @Prop({ type: String, enum: Role, default: Role.USER })
+  role: Role;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

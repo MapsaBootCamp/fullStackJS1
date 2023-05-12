@@ -1,5 +1,13 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  forwardRef,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from 'src/auth/auth.module';
 import { User, UserSchema } from './schemas/user.schema';
 import { TodoController } from './todo.controller';
 import { TestMiddleware } from './todo.middleware';
@@ -11,6 +19,7 @@ const mockTodoData = {
 
 @Module({
   imports: [
+    forwardRef(() => AuthModule),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [TodoController],
@@ -26,6 +35,7 @@ const mockTodoData = {
       inject: [TodoService],
     },
   ],
+  exports: [TodoService],
 })
 export class TodoModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

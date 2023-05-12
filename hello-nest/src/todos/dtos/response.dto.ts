@@ -10,6 +10,9 @@ export class UserResponseDto {
   }
   username: string;
 
+  @Exclude()
+  password: string;
+
   constructor(user: Partial<UserResponseDto>) {
     Object.assign(this, user);
   }
