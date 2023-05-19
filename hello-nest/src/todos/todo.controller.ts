@@ -21,12 +21,13 @@ import {
 import { UserResponseDto } from './dtos/response.dto';
 import { TodoCreateDto } from './dtos/todo-create.dto';
 import { CreateUserDto } from './dtos/user-create.dto';
-import { User } from './schemas/user.schema';
+import { Role, User } from './schemas/user.schema';
 import { TodoCategory } from './todo.enum';
 import { TodoService } from './todo.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from 'src/auth/auth.gaurds';
+import { Roles } from 'src/auth/role.decorator';
 
 // @UseInterceptors(LoggerInterceptor)
 @Controller()
@@ -68,7 +69,8 @@ export class TodoController {
     LoggerInterceptor,
     TransformInterceptor,
   )
-  @UseGuards(TestGuards)
+  @UseGuards(AuthGuard)
+  // @Roles(Role.ADMIN)
   @Get('users')
   async getUserList(): Promise<UserResponseDto[]> {
     const users = await this.todoService.userList();

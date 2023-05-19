@@ -7,22 +7,29 @@ import { TestGuards } from './common/guards/TestGuard.guards';
 import { LoggerModule } from './logger/logger.module';
 import { TodoModule } from './todos/todo.module';
 import { AuthModule } from './auth/auth.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+// import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { AModule } from './a/a.module';
+import { BModule } from './b/b.module';
+import { CModule } from './c/c.module';
+import { ConfigService } from './config/config.service';
+import { ConfigModule } from './config/config.module';
+// import { RoleGuard } from './auth/auth.gaurds';
 
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost:27017/todos'),
     ConfigModule.forRoot({
       isGlobal: true,
+      fileName: '.env',
     }),
     JwtModule.registerAsync({
       global: true,
       useFactory: (config: ConfigService) => {
         return {
-          secret: config.get<string>('JWT_SECRET'),
+          secret: config.get('JWT_SECRET'),
           signOptions: {
-            expiresIn: config.get<string | number>('JWT_EXPIRE'),
+            expiresIn: config.get('JWT_EXPIRE'),
           },
         };
       },
@@ -31,6 +38,10 @@ import { JwtModule } from '@nestjs/jwt';
     TodoModule,
     LoggerModule,
     AuthModule,
+    AModule,
+    BModule,
+    CModule,
+    ConfigModule,
   ],
   controllers: [AppController],
   providers: [
@@ -43,6 +54,11 @@ import { JwtModule } from '@nestjs/jwt';
       provide: APP_GUARD,
       useClass: TestGuards,
     },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: RoleGuard,
+    // },
+    ConfigService,
   ],
 })
 export class AppModule {}
