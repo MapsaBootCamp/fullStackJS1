@@ -7,7 +7,6 @@ require("dotenv").config();
 let productId;
 
 beforeAll(async () => {
-  console.log("before All");
   await mongoose.connect(process.env.MONGODB_URI);
 
   const product = await productModel.create({
@@ -19,22 +18,13 @@ beforeAll(async () => {
   return product;
 });
 
-beforeEach(async () => {
-  console.log("before Each");
-});
-
-afterEach(async () => {
-  console.log("after All");
-});
-
 afterAll(async () => {
-  console.log("after All");
   await productModel.findByIdAndDelete(productId);
   await mongoose.connection.close();
 });
 
 describe("GET /api/products", () => {
-  it("get products api", async () => {
+  it("get products list api", async () => {
     const response = await request(app).get("/api/products");
     expect(response.statusCode).toBe(200);
     expect(response.body).toBeInstanceOf(Array);
@@ -43,10 +33,17 @@ describe("GET /api/products", () => {
 });
 
 describe("GET /api/products/:id", () => {
-  it("get products api", async () => {
-    const response = await request(app).get(`/api/products/${productId}`);
+  let response;
+  beforeEach(async () => {
+    response = await request(app).get(`/api/products/${productId}`);
+  });
+
+  it("get products detail api", async () => {
     expect(response.statusCode).toBe(200);
     expect(response.body).toBeInstanceOf(Object);
+  });
+
+  it("get products detail api name check", async () => {
     expect(response.body.name).toBe("Product 1");
   });
 });
