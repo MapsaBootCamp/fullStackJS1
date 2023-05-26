@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
+import { Body, Controller, Param, ParseUUIDPipe, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserCreateDto } from './dto/user-create.dto';
 import { UserLoginDto, UserLoginStep2Dto } from './dto/user-login.dto';
@@ -21,9 +21,10 @@ export class AuthController {
   @Post('login/:keyId')
   async signInStep2(
     @Body() userLoginStep2Dto: UserLoginStep2Dto,
-    @Param('keyId') keyId: string,
+    @Param('keyId', ParseUUIDPipe) keyId: string,
   ): Promise<any> {
     const { id } = userLoginStep2Dto;
+
     return await this.authService.secondStepLogin(keyId, id);
   }
 }

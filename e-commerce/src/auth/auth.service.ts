@@ -43,6 +43,7 @@ export class AuthService {
     const cachedId = await this.cacheManager.get(keyId);
 
     if (cachedId === +id) {
+      await this.cacheManager.del(keyId);
       return 'OK';
     } else {
       return 'NoOK';
