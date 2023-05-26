@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Redirect, Res } from '@nestjs/common';
+import { Body, Controller, Param, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserCreateDto } from './dto/user-create.dto';
 import { UserLoginDto, UserLoginStep2Dto } from './dto/user-login.dto';
@@ -10,7 +10,7 @@ export class AuthController {
   @Post('register')
   async signUp(@Body() userCreateDto: UserCreateDto): Promise<any> {
     const { email, password, phoneNumber } = userCreateDto;
-    return await this.authService.creatUser(email, password, phoneNumber);
+    return await this.authService.createUser(email, password, phoneNumber);
   }
 
   @Post('login')
@@ -24,6 +24,6 @@ export class AuthController {
     @Param('keyId') keyId: string,
   ): Promise<any> {
     const { id } = userLoginStep2Dto;
-    return await this.authService.secondStepLogin('abcd', id);
+    return await this.authService.secondStepLogin(keyId, id);
   }
 }
