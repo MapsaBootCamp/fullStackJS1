@@ -9,6 +9,9 @@ export class UserService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
+  async findUserByEmail(email: string): Promise<User> {
+    return await this.userModel.findOne({ email });
+  }
   async createUser(
     email: string,
     hashedPassword: string,

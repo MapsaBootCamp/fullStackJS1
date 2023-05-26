@@ -5,6 +5,7 @@ import { OrderModule } from './order/order.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -14,6 +15,9 @@ import { AuthModule } from './auth/auth.module';
     ProductModule,
     OrderModule,
     AuthModule,
+    CacheModule.register({
+      isGlobal: true,
+    }),
   ],
   controllers: [],
   providers: [],
