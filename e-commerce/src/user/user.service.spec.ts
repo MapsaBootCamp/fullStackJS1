@@ -1,6 +1,6 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Model, Promise } from 'mongoose';
+import { Model, Promise, Types } from 'mongoose';
 import { User } from './schemas/user.schema';
 import { UserService } from './user.service';
 
@@ -27,9 +27,7 @@ describe('UserService', () => {
             new: jest.fn().mockResolvedValue(mockUser),
             constructor: jest.fn().mockResolvedValue(mockUser),
             exists: jest.fn(),
-            create: jest
-              .fn()
-              .mockImplementationOnce(() => Promise.resolve(mockUser)),
+            create: jest.fn().mockResolvedValue(mockUser),
           },
         },
       ],

@@ -47,3 +47,26 @@ describe("GET /api/products/:id", () => {
     expect(response.body.name).toBe("Product 1");
   });
 });
+
+describe("POST /api/products", () => {
+  it("check it's ok by all required parameters", async () => {
+    const response = await request(app).post(`/api/products/`).send({
+      name: "Product 2",
+      price: 32000,
+      description: "lkegkehg",
+    });
+    expect(response.statusCode).toBe(201);
+    expect(response.body.name).toBe("Product 2");
+  });
+});
+
+describe("DELETE /api/products/:id", () => {
+  it("check delete product", async () => {
+    const response = await request(app).delete(`/api/products/${productId}`);
+    expect(response.statusCode).toBe(200);
+    const newResponse = await request(app).get(
+      `/api/products/${response.body._id}`
+    );
+    expect(newResponse.body).toBeNull();
+  });
+});
