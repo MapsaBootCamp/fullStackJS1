@@ -11,7 +11,7 @@ export class AuthService {
     @Inject('CACHE_MANAGER') private cacheManager: Cache,
   ) {}
 
-  async creatUser(email: string, password: string, phoneNumber: string) {
+  async createUser(email: string, password: string, phoneNumber: string) {
     const hashedPassword = await bcrypt.hash(password, 10);
     return await this.userService.createUser(
       email,
@@ -32,21 +32,18 @@ export class AuthService {
     if (!validatePass) {
       throw new UnauthorizedException('email ya pass ghalate');
     }
-    // const randomId = uuidv4();
-    const randomId = 'abcd';
-    const randomKey = Math.floor(Math.random() * 10 ** 6);
-    await this.cacheManager.set(randomId, randomKey, 12000);
-    console.log('hazrat: ', await this.cacheManager.get(randomId));
-    console.log(randomKey);
+    const randomId = uuidv4();
+    // const randomKey = Math.floor(Math.random() * 10 ** 6);
+    const randomKey = Math.floor(100000 + Math.random() * 900000);
+    console.log('OTP KEY: ', randomKey);
+    await this.cacheManager.set(randomId, randomKey, 120000);
     return { id: randomId };
   }
   async secondStepLogin(keyId: string, id: string) {
-    console.log('keyId', keyId);
     const cachedId = await this.cacheManager.get(keyId);
-    console.log('id', id);
-    console.log('cachedId', cachedId);
 
     if (cachedId === +id) {
+      await this.cacheManager.del(keyId);
       return 'OK';
     } else {
       return 'NoOK';
