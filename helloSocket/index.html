@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Socket.IO chat</title>
+    <style>
+        body {
+            margin: 0;
+            padding-bottom: 3rem;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .chat {
+            display: none;
+        }
+
+        .login {
+            display: flex;
+            justify-content: center;
+            padding-top: 200px;
+        }
+
+        #form {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 0.25rem;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            height: 3rem;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+        }
+
+        #input {
+            border: none;
+            padding: 0 1rem;
+            flex-grow: 1;
+            border-radius: 2rem;
+            margin: 0.25rem;
+        }
+
+        #input:focus {
+            outline: none;
+        }
+
+        #form>button {
+            background: #333;
+            border: none;
+            padding: 0 1rem;
+            margin: 0.25rem;
+            border-radius: 3px;
+            outline: none;
+            color: #fff;
+        }
+
+        #messages {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        #messages>li {
+            padding: 0.5rem 1rem;
+        }
+
+        #messages>li:nth-child(odd) {
+            background: #efefef;
+        }
+    </style>
+</head>
+
+<body>
+    <p id="is-typing"></p>
+    <p id="is-online"></p>
+    <div class="chat" id="chat">
+        <ul id="messages"></ul>
+        <form id="form" action="">
+            <input id="input" autocomplete="off" /><button>Send</button>
+        </form>
+    </div>
+
+    <div class="login" id="login">
+        <form id="login-form" action="">
+            <span id="username"></span>
+            <input id="nickname" autocomplete="off" /><button>login</button>
+        </form>
+    </div>
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const ul = document.getElementById("messages")
+        const form = document.getElementById("form")
+        const input = document.getElementById("input")
+        const loginForm = document.getElementById("login-form")
+        const loginInput = document.getElementById("nickname")
+        const isTypingElement = document.getElementById("is-typing")
+        const isOnlineElement = document.getElementById("is-online")
+        let nickname;
+        let isTyping = false;
+
+        loginForm.addEventListener("submit", (e) => {
+            e.preventDefault()
+            if (loginInput.value) {
+                nickname = loginInput.value
+                socket.emit("login user", nickname)
+                loginInput.value = ""
+                const chatBody = document.getElementById("chat")
+                const loginBody = document.getElementById("login")
+
+                document.title = nickname
+                loginBody.style.display = "none"
+                chatBody.style.display = "block"
+            }
+        })
+
+        input.addEventListener("keydown", (e) => {
+            if (e.keyCode !== 13) {
+                socket.emit("is typing", nickname)
+            }
+        })
+
+
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault()
+            if (input.value) {
+                socket.emit("send message", `${nickname} -> ${input.value}`)
+                input.value = ""
+            }
+        })
+
+        socket.on("log is typing", (msg) => {
+            if (!isTyping) {
+                isTyping = true;
+                isTypingElement.innerHTML = msg
+                setTimeout(clearIsTyping, 1000);
+            }
+
+        })
+
+        function clearIsTyping() {
+            isTyping = false
+            isTypingElement.innerHTML = ""
+        }
+
+        socket.on('chat message', function (msg) {
+            var item = document.createElement('li');
+            item.textContent = msg;
+            ul.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        socket.on("Is Online", (msg) => {
+            console.log(msg);
+            isOnlineElement.innerHTML = msg
+        })
+    </script>
+</body>
+
+</html>
