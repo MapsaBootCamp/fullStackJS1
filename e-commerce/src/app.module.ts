@@ -3,12 +3,13 @@ import { UserModule } from './user/user.module';
 import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { JwtModule } from '@nestjs/jwt';
-import type { RedisClientOptions } from 'redis';
-import * as redisStore from 'cache-manager-redis-store';
+
+import { RedisClientOptions } from 'redis';
+import { redisStore } from 'cache-manager-redis-yet';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -30,13 +31,13 @@ import * as redisStore from 'cache-manager-redis-store';
     ProductModule,
     OrderModule,
     AuthModule,
-    CacheModule.register<RedisClientOptions>({
+    CacheModule.registerAsync<RedisClientOptions>({
       isGlobal: true,
-      useFactory: async () => ({
-        store: redisStore,
-        host: 'localhost',
-        port: 6379,
+      imports: [ConfigModule],
+      useFactory: async (config: ConfigService) => ({
+        store: await redisStore({ url: config.get<string>('REDIS_URL') }),
       }),
+      inject: [ConfigService],
     }),
   ],
   controllers: [],
