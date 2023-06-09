@@ -20,6 +20,12 @@ export class GateWayConfig {
         host: process.env.LOGGER_SERVICE_HOST,
       },
     };
+    this.envConfig.map = {
+      options: {
+        port: process.env.MAP_SERVICE_PORT,
+        host: process.env.MAP_SERVICE_HOST,
+      },
+    };
   }
 
   get(keyName: string) {

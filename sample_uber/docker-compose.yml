@@ -35,3 +35,11 @@ services:
       - .env
     volumes:
       - ./logger/src:/app/src
+
+  map_service:
+    build: ./map_service
+    user: root
+    env_file:
+      - .env
+    volumes:
+      - ./map_service/src:/app/src

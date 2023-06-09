@@ -58,6 +58,17 @@ import { GateWayConfig } from './config/config-service.conf';
       inject: [GateWayConfig],
     },
     {
+      provide: 'MAP_SERVICE',
+      useFactory: (configService: GateWayConfig) => {
+        const configTrip = configService.get('map');
+        return ClientProxyFactory.create({
+          transport: Transport.TCP,
+          ...configTrip,
+        });
+      },
+      inject: [GateWayConfig],
+    },
+    {
       provide: 'LOGGER_SERVICE',
       useFactory: (configService: GateWayConfig) => {
         const configTrip = configService.get('logger');

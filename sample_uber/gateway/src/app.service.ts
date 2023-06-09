@@ -7,6 +7,7 @@ export class AppService {
   constructor(
     @Inject('USER_SERVICE') private readonly clientUserService: ClientProxy,
     @Inject('TRIP_SERVICE') private readonly clientTripService: ClientProxy,
+    @Inject('MAP_SERVICE') private readonly clientMapService: ClientProxy,
     @Inject('LOGGER_SERVICE') private readonly clientLoggerService: ClientProxy,
   ) {}
 
@@ -24,5 +25,9 @@ export class AppService {
   getDrivers(username: string) {
     this.clientLoggerService.emit('log_deriver_request', { username }); /// event-pattern
     return this.clientUserService.send({ cmd: 'list_drivers' }, {}); /// message-pattern
+  }
+
+  getBill(body: any) {
+    return this.clientMapService.send({ cmd: 'get_bill_distance' }, body);
   }
 }

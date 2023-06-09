@@ -29,4 +29,9 @@ export class AppController {
   getDriver(@Query('username') username: string) {
     return this.appService.getDrivers(username);
   }
+
+  @Post('bill-distance')
+  getBill(@Body() body: any) {
+    return this.appService.getBill(body);
+  }
 }
