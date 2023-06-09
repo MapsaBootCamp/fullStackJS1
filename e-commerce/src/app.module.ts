@@ -33,7 +33,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     AuthModule,
     CacheModule.registerAsync<RedisClientOptions>({
       isGlobal: true,
-      imports: [ConfigModule],
       useFactory: async (config: ConfigService) => ({
         store: await redisStore({ url: config.get<string>('REDIS_URL') }),
       }),
