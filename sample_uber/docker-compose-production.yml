@@ -1,0 +1,35 @@
+services:
+
+  gateway:
+    build: ./gateway
+    user: root
+    ports:
+      - 8080:5000
+    env_file:
+      - .env
+    volumes:
+      - ./gateway/src:/app/src
+
+  users:
+    build: ./users
+    user: root
+    env_file:
+      - .env
+    volumes:
+      - ./users/src:/app/src
+
+  trip:
+    build: ./trip
+    user: root
+    env_file:
+      - .env
+    volumes:
+      - ./trip/src:/app/src
+
+  logger:
+    build: ./logger
+    user: root
+    env_file:
+      - .env
+    volumes:
+      - ./logger/src:/app/src
