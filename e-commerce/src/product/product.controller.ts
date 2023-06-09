@@ -10,6 +10,11 @@ export class ProductController {
     return await this.productService.allCategories();
   }
 
+  @Get('all-categories-object')
+  async getAllCategoriesObject() {
+    return await this.productService.allCategoriesObject();
+  }
+
   @Post('add-category')
   async addCategory(@Body() createCategoryDto: CreateCategoryDto) {
     console.log(createCategoryDto.title);

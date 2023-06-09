@@ -15,6 +15,27 @@ export class ProductService {
       .populate({ path: 'parentCat', populate: { path: 'parentCat' } });
   }
 
+  async allCategoriesObject() {
+
+    const allCategories = await this.categoryModel.find();
+
+    const titles = allCategories.map((cat) => cat.title);
+    const result = allCategories.map((parent) => {
+      const children = allCategories.filter((child) => {
+        return (child.id !== child.parentCat && child.parentCat === parent.id);
+      });
+      if (children.length) {
+        parent.children = children;
+      }
+      return parent;
+    }).filter((cat) => {
+      return (cat.title === cat.parentCat || !titles.includes(cat.parentCat));
+    });
+
+    return result;
+
+  }
+
   async addCategory(title: string, parentCat: string) {
     let parentCatObj;
     if (parentCat) {
