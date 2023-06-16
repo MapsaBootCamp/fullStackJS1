@@ -30,6 +30,7 @@ export class AppService {
   ];
 
   getDriverList() {
+    console.log('Salam');
     return this.drivers;
   }
 }

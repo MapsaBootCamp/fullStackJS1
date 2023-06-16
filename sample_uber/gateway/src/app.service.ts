@@ -22,8 +22,14 @@ export class AppService {
       { username },
     );
   }
-  getDrivers(username: string) {
+  async getDrivers(username: string) {
+    console.log('Hello');
     this.clientLoggerService.emit('log_deriver_request', { username }); /// event-pattern
+    this.clientLoggerService.emit('log_mapsa', 'hello_mapsa'); /// event-pattern
+    const x = await this.clientLoggerService.send(
+      { cmd: 'log_mapsa_cmd' },
+      'hello_mapsa',
+    ); /// message-pattern
     return this.clientUserService.send({ cmd: 'list_drivers' }, {}); /// message-pattern
   }
 

@@ -1,4 +1,4 @@
-FROM base_image_uber
+FROM base_image_uber_rabbit
 
 COPY --chown=node:node . .
 

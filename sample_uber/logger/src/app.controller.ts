@@ -21,6 +21,17 @@ export class AppController {
     return this.appService.getTripRequestLog(data.username);
   }
 
+  @MessagePattern({ cmd: 'log_deriver_request_message' })
+  messageLog(data: any) {
+    console.log(data);
+    return data;
+  }
+
+  @EventPattern('log_mapsa')
+  logMapsa(data: any) {
+    console.log('LOGGER SERVICE - camp: ', data);
+  }
+
   @EventPattern('log_deriver_request')
   logDriverRequest(data: IDriverRequest) {
     console.log('LOGGER SERVICE - user: ', data.username);

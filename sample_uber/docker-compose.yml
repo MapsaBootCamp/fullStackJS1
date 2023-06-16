@@ -9,14 +9,20 @@ services:
       - 8080:5000
     env_file:
       - .env
+    environment:
+      - rabbitDomainName=rabbit
     volumes:
       - ./gateway/src:/app/src
+    depends_on:
+      - rabbit
 
   users:
     build: ./users
     user: root
     env_file:
       - .env
+    environment:
+      - rabbitDomainName=rabbit
     volumes:
       - ./users/src:/app/src
 
@@ -25,21 +31,37 @@ services:
     user: root
     env_file:
       - .env
+    environment:
+      - rabbitDomainName=rabbit
     volumes:
       - ./trip/src:/app/src
+    depends_on:
+      - rabbit
 
-  logger:
-    build: ./logger
-    user: root
-    env_file:
-      - .env
-    volumes:
-      - ./logger/src:/app/src
+  # logger:
+  #   build: ./logger
+  #   user: root
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     - rabbitDomainName=rabbit
+  #   volumes:
+  #     - ./logger/src:/app/src
+  #   depends_on:
+  #     - rabbit
 
   map_service:
     build: ./map_service
     user: root
     env_file:
       - .env
+    environment:
+      - rabbitDomainName=rabbit
     volumes:
       - ./map_service/src:/app/src
+
+  rabbit:
+    image: rabbitmq:3.10.5-management-alpine
+    user: root
+    ports:
+      - 15672:15672
