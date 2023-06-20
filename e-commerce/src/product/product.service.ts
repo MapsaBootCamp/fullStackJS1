@@ -9,10 +9,12 @@ export class ProductService {
     @InjectModel(Category.name) private readonly categoryModel: Model<Category>,
   ) {}
 
+  async findCategoryById(id: string) {
+    return await this.categoryModel.findById(id);
+  }
   async allCategories() {
-    return await this.categoryModel
-      .find()
-      .populate({ path: 'parentCat', populate: { path: 'parentCat' } });
+    return await this.categoryModel.find();
+    // .populate({ path: 'parentCat', populate: { path: 'parentCat' } });
   }
 
   async allCategoriesObject() {
