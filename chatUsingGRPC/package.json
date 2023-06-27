@@ -1,0 +1,19 @@
+{
+  "name": "chatusinggrpc",
+  "version": "1.0.0",
+  "description": "realtime using grpc",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MapsaBootCamp/fullStackJS1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "grpc",
+    "chat"
+  ],
+  "author": "teghfo",
+  "license": "ISC"
+}
