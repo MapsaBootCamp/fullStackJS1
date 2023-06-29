@@ -13,7 +13,8 @@ const REMOTE_SERVER = "localhost:5000";
 const packageDef = protoLoader.loadSync(PROTO_PATH);
 const chatExample = grpc.loadPackageDefinition(packageDef).chatExample;
 
-let username = process.argv[2];
+let username;
+// let username = process.argv[2];
 
 const client = new chatExample.Chat(
   REMOTE_SERVER,
@@ -46,4 +47,9 @@ function main() {
   });
 }
 
-main();
+terminalLine.question("what is yout name? ", (msg) => {
+  username = msg;
+  main();
+});
+
+// main();
