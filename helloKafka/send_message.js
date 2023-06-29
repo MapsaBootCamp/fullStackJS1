@@ -10,7 +10,7 @@ const producer = kafka.producer();
   try {
     await producer.connect();
     await producer.send({
-      topic: "nodeJS",
+      topic: "nestJS",
       messages: [{ key: "salam", value: "Hello KafkaJS user!", partition: 1 }],
     });
 

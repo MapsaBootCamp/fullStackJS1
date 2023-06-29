@@ -5,14 +5,18 @@ const kafka = new Kafka({
   brokers: ["localhost:9092"],
 });
 
-const consumer = kafka.consumer({ groupId: "test-group-1" });
+const consumer = kafka.consumer({
+  groupId: "test-group-2",
+});
 
 (async () => {
   await consumer.connect();
-  await consumer.subscribe({
-    topic: "nodeJS",
+  await consumer.subscribe({  
+    topic: "nestJS",
     fromBeginning: true,
   });
+
+  await consumer.assign();
 
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
