@@ -1,0 +1,26 @@
+{
+  "name": "chatusinggrpc",
+  "version": "1.0.0",
+  "description": "realtime using grpc",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MapsaBootCamp/fullStackJS1"
+  },
+  "scripts": {
+    "start:client": "nodemon client.js"
+  },
+  "keywords": [
+    "grpc",
+    "chat"
+  ],
+  "author": "teghfo",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.8.17",
+    "@grpc/proto-loader": "^0.7.7"
+  }
+}
