@@ -1,0 +1,3 @@
+FROM base_image_uber_rabbit
+
+RUN npm i --save kafkajs

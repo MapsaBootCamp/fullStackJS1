@@ -25,6 +25,8 @@ services:
       - rabbitDomainName=rabbit
     volumes:
       - ./users/src:/app/src
+    depends_on:
+      - kafka
 
   trip:
     build: ./trip
@@ -37,6 +39,7 @@ services:
       - ./trip/src:/app/src
     depends_on:
       - rabbit
+      - kafka
 
   # logger:
   #   build: ./logger
@@ -65,3 +68,20 @@ services:
     user: root
     ports:
       - 15672:15672
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - zookeeper

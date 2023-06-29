@@ -11,4 +11,10 @@ export class AppController {
   addTrip(data: TripRequest) {
     console.log('TRIP SERVICE - ', JSON.stringify(data));
   }
+
+  @EventPattern('get_user_kafka')
+  getUser(data: any) {
+    console.log('seda zade shod');
+    this.appService.getUserInfo(0);
+  }
 }

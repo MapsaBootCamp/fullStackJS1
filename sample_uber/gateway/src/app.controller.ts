@@ -34,4 +34,9 @@ export class AppController {
   getBill(@Body() body: any) {
     return this.appService.getBill(body);
   }
+
+  @Get('test-kafka')
+  getKafkaFromTrip() {
+    return this.appService.getKafka();
+  }
 }

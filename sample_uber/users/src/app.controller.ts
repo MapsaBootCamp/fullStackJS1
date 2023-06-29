@@ -6,8 +6,14 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @MessagePattern({ cmd: 'list_drivers' })
-  getDriverList(data: any) {
-    return this.appService.getDriverList();
+  // @MessagePattern({ cmd: 'list_drivers' })
+  // getDriverList(data: any) {
+  //   return this.appService.getDriverList();
+  // }
+
+  @MessagePattern('get_user_ahmagh')
+  getUser(data: any) {
+    const { id } = data;
+    return this.appService.getUser(id);
   }
 }

@@ -36,4 +36,8 @@ export class AppService {
   getBill(body: any) {
     return this.clientMapService.send({ cmd: 'get_bill_distance' }, body);
   }
+
+  getKafka() {
+    return this.clientTripService.emit('get_user_kafka', {});
+  }
 }

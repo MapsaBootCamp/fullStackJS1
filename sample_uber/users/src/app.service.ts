@@ -33,4 +33,8 @@ export class AppService {
     console.log('Salam');
     return this.drivers;
   }
+
+  getUser(id: number) {
+    return this.drivers[id];
+  }
 }
