@@ -39,11 +39,16 @@ const jwtTokenMiddleware =
     const token = socket.handshake.auth.token;
 
     logger.debug(`Validating auth token before connection: ${token}`);
-    try {
-      const payload = jwtService.verify(token);
-      socket.username = payload.username;
-      next();
-    } catch {
+    if (!token) {
+      logger.log('token nadarad');
       next(new Error('Forbidden'));
+    } else {
+      try {
+        const payload = jwtService.verify(token);
+        socket.username = payload.username;
+        next();
+      } catch {
+        next(new Error('Forbidden'));
+      }
     }
   };
