@@ -32,19 +32,18 @@ export class LocationGateWay
   }
 
   async handleConnection(socket: AuthedSocket) {
-    const rooms = (await this.userService.findUserByUsername(socket.username))
-      .rooms;
+    const user = await this.userService.findUserByUsername(socket.username);
 
-    this.logger.log('rooms: ', rooms);
+    const rooms = user.toObject().rooms;
 
     rooms.forEach((room) => {
-      socket.join(room);
+      socket.join(room.toString());
+      this.logger.log(
+        `room size ${room.toString()}: ${
+          this.io.adapter.rooms.get(room.toString()).size
+        }`,
+      );
     });
-
-    this.logger.log(
-      `room size ${rooms[0]}: `,
-      this.io.adapter.rooms.get(rooms[0])?.size,
-    );
 
     this.logger.log(`a user with ${socket.username} connected!`);
     socket.broadcast.emit('chat message', 'ye nafar connect shod');
@@ -64,19 +63,27 @@ export class LocationGateWay
     socket.emit('chat message', { message: 'data send shod' });
   }
 
+  @SubscribeMessage('send.room')
+  sendMessageToRoom(socket: Socket, data: any) {
+    this.io.to(data.roomId).emit('chat message', data.message);
+    // socket.broadcast.emit('chat message', data.message);
+    // socket.emit('chat message', { message: 'data send shod' });
+  }
+
   @SubscribeMessage('create.room')
   async createRoom(socket: AuthedSocket, data: string) {
-    this.logger.log(data);
     const room = await this.locationService.createRoom(data);
     console.log(room._id);
-    await this.userService.addUserToRoom(socket.username, room._id.toString());
+    await this.userService.addUserToRoom(socket.username, room._id);
   }
 
   @SubscribeMessage('add.user.room')
-  async addUserRoom(socket: AuthedSocket, data: any) {
-    this.logger.log(data);
+  async addUserRoom(
+    socket: AuthedSocket,
+    data: { username: string; roomId: string },
+  ) {
     const { username, roomId } = data;
-    this.logger.log('++++++++++++++++++++', roomId);
+    console.log({ username, roomId });
     try {
       await this.userService.addUserToRoom(username, roomId);
       this.logger.log('user add shod');
