@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId, Types } from 'mongoose';
 import { User } from './schemas/user.schema';
@@ -14,10 +14,12 @@ export class UserService {
   }
 
   async addUserToRoom(username: string, roomId: any) {
+    console.log(roomId);
+
     return await this.userModel.updateOne(
       { username },
       {
-        $addToSet: { rooms: roomId },
+        $push: { rooms: roomId },
       },
     );
   }

@@ -8,7 +8,8 @@ const terminalLine = readline.createInterface({
 
 let PORT;
 const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IktvYnJhIiwiaWF0IjoxNjg4MTMzMDkxLCJleHAiOjE2ODgzMDU4OTF9.Eb8OUDn2XOJgXkJV4cjA2q7F1H6h99mFwxtIlOcatiE';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkdoYXNlbSIsImlhdCI6MTY4ODE0MjI3NywiZXhwIjoxNjg4MzE1MDc3fQ.mGUymOegz-EhFZFsGiVi1REXhASFjkgz4wZ0VnaXkU8';
+
 function main() {
   const socket = io(`ws://localhost:${PORT}/location`, {
     auth: {

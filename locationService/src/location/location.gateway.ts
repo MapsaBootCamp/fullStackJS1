@@ -12,7 +12,6 @@ import { GatewayGuard } from 'src/common/guards/gateway.guards';
 import { AuthedSocket } from 'src/common/type';
 import { UserService } from 'src/user/user.service';
 import { LocationService } from './location.service';
-import mongoose, { Types, ObjectId } from 'mongoose';
 
 @WebSocketGateway({ namespace: '/location' })
 export class LocationGateWay
@@ -39,12 +38,12 @@ export class LocationGateWay
     this.logger.log('rooms: ', rooms);
 
     rooms.forEach((room) => {
-      socket.join(room._id.toString());
+      socket.join(room);
     });
 
     this.logger.log(
-      `room size ${rooms[0]._id.toString()}: `,
-      this.io.adapter.rooms.get(rooms[0]._id.toString()).size,
+      `room size ${rooms[0]}: `,
+      this.io.adapter.rooms.get(rooms[0])?.size,
     );
 
     this.logger.log(`a user with ${socket.username} connected!`);
@@ -60,6 +59,7 @@ export class LocationGateWay
   handleSendMessage(socket: Socket, data: string) {
     this.logger.log(data);
     // this.io.emit('chat message', data);
+    this.io.to('649f00b920ee440915df75d1').emit('chat message', 'salam');
     socket.broadcast.emit('chat message', data);
     socket.emit('chat message', { message: 'data send shod' });
   }
@@ -68,18 +68,17 @@ export class LocationGateWay
   async createRoom(socket: AuthedSocket, data: string) {
     this.logger.log(data);
     const room = await this.locationService.createRoom(data);
-    await this.userService.addUserToRoom(socket.username, room._id);
+    console.log(room._id);
+    await this.userService.addUserToRoom(socket.username, room._id.toString());
   }
 
   @SubscribeMessage('add.user.room')
   async addUserRoom(socket: AuthedSocket, data: any) {
     this.logger.log(data);
     const { username, roomId } = data;
+    this.logger.log('++++++++++++++++++++', roomId);
     try {
-      await this.userService.addUserToRoom(
-        username,
-        Types.ObjectId.createFromHexString(roomId),
-      );
+      await this.userService.addUserToRoom(username, roomId);
       this.logger.log('user add shod');
     } catch (error) {
       this.logger.error(error.message);
