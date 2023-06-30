@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  web-app:
+    build: .
+    volumes:
+      - .:/usr/src/app
+    command: npm run start:dev
+    ports:
+        - 3000:3000
+        - 9229:9229
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    env_file:
+      - .env
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_location_app_container:/data/db
+
+volumes:
+  mongodb_location_app_container:
