@@ -1,7 +1,7 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId, Types } from 'mongoose';
-import { User } from './schemas/user.schema';
+import { Model, Types } from 'mongoose';
+import { User, UserDocument } from './schemas/user.schema';
 
 @Injectable()
 export class UserService {
@@ -9,25 +9,22 @@ export class UserService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
-  async findUserByUsername(username: string): Promise<User> {
+  async findUserByUsername(username: string): Promise<UserDocument> {
     return await this.userModel.findOne({ username });
   }
 
-  async addUserToRoom(username: string, roomId: any) {
-    console.log(roomId);
-
+  async addUserToRoom(username: string, roomId: Types.ObjectId | string) {
     return await this.userModel.updateOne(
       { username },
-      {
-        $push: { rooms: roomId },
-      },
+      { $addToSet: { rooms: roomId } },
+      { new: true },
     );
   }
 
   async createUser(
     username: string,
     hashedPassword: string,
-  ): Promise<User | Error> {
+  ): Promise<UserDocument> {
     if (await this.userModel.exists({ username })) {
       throw new HttpException('chenin useri darim', HttpStatus.CONFLICT);
     }
