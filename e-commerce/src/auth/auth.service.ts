@@ -14,12 +14,7 @@ export class AuthService {
   ) {}
 
   async createUser(email: string, password: string, phoneNumber: string) {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    return await this.userService.createUser(
-      email,
-      hashedPassword,
-      phoneNumber,
-    );
+    return await this.userService.createUser(email, password, phoneNumber);
   }
 
   async firstStepLogin(
@@ -30,7 +25,9 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException('email ya pass ghalate');
     }
-    const validatePass = await bcrypt.compare(password, user.password);
+    // const validatePass = await bcrypt.compare(password, user.password);
+    const validatePass = await user.comparePassword(password);
+
     if (!validatePass) {
       throw new UnauthorizedException('email ya pass ghalate');
     }
