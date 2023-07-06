@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import * as bcrypt from 'bcrypt';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -40,6 +41,26 @@ export class User {
 
   @Prop({ default: false })
   active: boolean;
+
+  comparePassword: (string) => boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+//// hooks, methods
+
+UserSchema.index({
+  email: 1,
+});
+
+UserSchema.pre<UserDocument>('save', async function (next) {
+  if (this.isNew || this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
+  console.log('saved user info');
+  next();
+});
+
+UserSchema.methods.comparePassword = async function (inputPassword: string) {
+  return await bcrypt.compare(inputPassword, this.password);
+};

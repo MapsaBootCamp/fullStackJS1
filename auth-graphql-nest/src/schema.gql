@@ -1,0 +1,23 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: Float!
+  username: String!
+  password: String!
+}
+
+type Query {
+  userList: [User!]!
+  login(input: RegisterType!): User!
+}
+
+input RegisterType {
+  username: String!
+  password: String!
+}
+
+type Mutation {
+  register(input: RegisterType!): User!
+}

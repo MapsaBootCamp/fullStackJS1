@@ -14,7 +14,7 @@ export class UserService {
   }
   async createUser(
     email: string,
-    hashedPassword: string,
+    password: string,
     phoneNumber: string,
   ): Promise<User | Error> {
     if (await this.userModel.exists({ email })) {
@@ -23,7 +23,7 @@ export class UserService {
     try {
       return await this.userModel.create({
         email,
-        password: hashedPassword,
+        password,
         phoneNumber,
       });
     } catch (error) {
